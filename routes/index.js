@@ -1,6 +1,6 @@
 // routes/index.js
 import { Router } from 'express';
-import AppController from '../controllers/AppController.js';
+import AppController from '../controllers/AppController';
 
 const router = Router();
 

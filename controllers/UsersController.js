@@ -1,38 +1,37 @@
-import crypto from 'crypto';
+import sha1 from 'sha1';
 import dbClient from '../utils/db';
 
 class UsersController {
   static async postNew(req, res) {
     const { email, password } = req.body;
 
-    // Validate input
     if (!email) {
       return res.status(400).json({ error: 'Missing email' });
     }
+
     if (!password) {
       return res.status(400).json({ error: 'Missing password' });
     }
 
-    const existingUser = await dbClient.collection('users').findOne({ email });
+    const usersCollection = dbClient.client.db().collection('users');
+    const existingUser = await usersCollection.findOne({ email });
+
     if (existingUser) {
       return res.status(400).json({ error: 'Already exist' });
     }
 
-    const hashedPassword = crypto.createHash('sha1').update(password).digest('hex');
-
-    const newUser = {
+    const hashedPassword = sha1(password);
+    const result = await usersCollection.insertOne({
       email,
       password: hashedPassword,
+    });
+
+    const newUser = {
+      id: result.insertedId,
+      email,
     };
 
-    // Insert the new user into the database
-    const result = await dbClient.collection('users').insertOne(newUser);
-
-    // Respond with the new user data
-    return res.status(201).json({
-      id: result.insertedId,
-      email: newUser.email,
-    });
+    return res.status(201).json(newUser);
   }
 }
 

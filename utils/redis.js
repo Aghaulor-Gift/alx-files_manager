@@ -4,7 +4,7 @@ import { promisify } from 'util';
 class RedisClient {
   constructor() {
     this.client = redis.createClient();
-    
+
     this.client.on('error', (error) => {
       console.error(`Redis client error: ${error}`);
     });
@@ -20,15 +20,15 @@ class RedisClient {
   }
 
   async get(key) {
-    return await this.getAsync(key);
+    return this.getAsync(key);
   }
 
   async set(key, value, duration) {
-    await this.setAsync(key, value, 'EX', duration);
+    return this.setAsync(key, value, 'EX', duration);
   }
 
   async del(key) {
-    await this.delAsync(key);
+    return this.delAsync(key);
   }
 }
 

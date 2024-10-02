@@ -1,12 +1,11 @@
-/* eslint-disable import/no-named-as-default */
 const redisClient = require('../utils/redis');
 const dbClient = require('../utils/db');
 
 class AppController {
   static async getStatus(req, res) {
-    const redisStatus = redisClient.isAlive();
-    const dbStatus = dbClient.isAlive();
-    res.status(200).json({ redis: redisStatus, db: dbStatus });
+    const redisAlive = redisClient.isAlive();
+    const dbAlive = dbClient.isAlive();
+    res.status(200).json({ redis: redisAlive, db: dbAlive });
   }
 
   static async getStats(req, res) {

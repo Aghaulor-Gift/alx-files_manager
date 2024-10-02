@@ -1,14 +1,15 @@
-const fs = require('fs').promises;
-const path = require('path');
-const { v4: uuidv4 } = require('uuid');
-const { ObjectId } = require('mongodb');
-const mime = require('mime-types');
-const Queue = require('bull');
-const dbClient = require('../utils/db');
-const redisClient = require('../utils/redis');
+import fs from 'fs/promises';
+import path from 'path';
+import { v4 as uuidv4 } from 'uuid';
+import { ObjectId } from 'mongodb';
+import mime from 'mime-types';
+import Queue from 'bull';
+import dbClient from '../utils/db';
+import redisClient from '../utils/redis';
 
 const FOLDER_PATH = process.env.FOLDER_PATH || '/tmp/files_manager';
 const fileQueue = new Queue('fileQueue');
+
 
 class FilesController {
   static async postUpload(req, res) {
@@ -209,4 +210,4 @@ class FilesController {
     return res.status(200).json(files);
 }
 
-module.exports = FilesController;
+export default FilesController;
